@@ -1,9 +1,9 @@
 {
   "name": "sem-vscode",
-  "displayName": "sem",
+  "displayName": "Sem: Semantic Version Control",
   "description": "Entity-level semantic diffs, blame, impact analysis, and dependency graphs",
   "version": "0.1.0",
-  "publisher": "ataraxy-labs",
+  "publisher": "AtaraxyLabs",
   "repository": {
     "type": "git",
     "url": "https://github.com/rs545837/sem-vscode"
