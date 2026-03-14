@@ -1,0 +1,111 @@
+{
+  "name": "sem-vscode",
+  "displayName": "sem",
+  "description": "Entity-level semantic diffs, blame, impact analysis, and dependency graphs",
+  "version": "0.1.0",
+  "publisher": "ataraxy-labs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rs545837/sem-vscode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Visualization",
+    "Other"
+  ],
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "workspaceContains:.git"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sem.refreshDiff",
+        "title": "Refresh Semantic Diff",
+        "category": "Sem",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sem.impact",
+        "title": "Impact Analysis",
+        "category": "Sem"
+      },
+      {
+        "command": "sem.graph",
+        "title": "Show Dependency Graph",
+        "category": "Sem"
+      },
+      {
+        "command": "sem.toggleBlame",
+        "title": "Toggle Entity Blame",
+        "category": "Sem"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sem",
+          "title": "Sem",
+          "icon": "$(git-compare)"
+        }
+      ]
+    },
+    "views": {
+      "sem": [
+        {
+          "id": "semDiff",
+          "name": "Semantic Diff"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "sem.refreshDiff",
+          "when": "view == semDiff",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Sem",
+      "properties": {
+        "sem.binaryPath": {
+          "type": "string",
+          "default": "sem",
+          "description": "Path to the sem binary"
+        },
+        "sem.blame.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show entity blame as CodeLens"
+        },
+        "sem.gutter.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show gutter decorations for changed entities"
+        },
+        "sem.diff.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh diff on file save"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.5.0"
+  }
+}
