@@ -107,4 +107,8 @@ export class Sem {
     this.diffCache = null;
     this.blameCache.clear();
   }
+
+  getCwd(): string {
+    return this.cwd;
+  }
 }
