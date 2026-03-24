@@ -111,4 +111,8 @@ export class Sem {
   getCwd(): string {
     return this.cwd;
   }
+
+  getBinaryPath(): string {
+    return this.binaryPath;
+  }
 }
