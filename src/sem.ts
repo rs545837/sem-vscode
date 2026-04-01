@@ -23,12 +23,12 @@ export class Sem {
       "sem";
   }
 
-  private exec(args: string[]): Promise<string> {
+  private exec(args: string[], timeout = 30000): Promise<string> {
     return new Promise((resolve, reject) => {
-      execFile(
+      const proc = execFile(
         this.binaryPath,
         args,
-        { cwd: this.cwd, maxBuffer: 10 * 1024 * 1024 },
+        { cwd: this.cwd, maxBuffer: 10 * 1024 * 1024, timeout },
         (err, stdout, stderr) => {
           if (err) {
             reject(new Error(stderr || err.message));
@@ -37,6 +37,7 @@ export class Sem {
           }
         }
       );
+      proc.stdin?.end();
     });
   }
 
@@ -49,13 +50,14 @@ export class Sem {
     }
   }
 
-  async diff(staged = false): Promise<DiffOutput> {
-    if (this.diffCache) return this.diffCache;
+  async diff(staged = false, base?: string): Promise<DiffOutput> {
+    if (!base && this.diffCache) return this.diffCache;
     const args = ["diff", "--format", "json"];
     if (staged) args.push("--staged");
+    if (base) args.push("--base", base);
     const out = await this.exec(args);
     const result: DiffOutput = JSON.parse(out);
-    this.diffCache = result;
+    if (!base) this.diffCache = result;
     return result;
   }
 
@@ -104,5 +106,13 @@ export class Sem {
   invalidateAll(): void {
     this.diffCache = null;
     this.blameCache.clear();
+  }
+
+  getCwd(): string {
+    return this.cwd;
+  }
+
+  getBinaryPath(): string {
+    return this.binaryPath;
   }
 }
